@@ -36,6 +36,8 @@
 
 #include <net/route.h>
 #include <net/if.h>
+#include <linux/in6.h>
+#include <linux/ipv6_route.h>
 
 #include "libbb.h"
 #include "inet_common.h"
