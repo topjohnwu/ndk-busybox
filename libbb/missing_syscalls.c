@@ -36,6 +36,16 @@ int shmget(key_t key, size_t size, int shmflg)
   return syscall(__NR_shmget, key, size, shmflg);
 }
 
+int shmdt(const void *shmaddr)
+{
+  return syscall(__NR_shmdt, shmaddr);
+}
+
+void *shmat(int shmid, const void *shmaddr, int shmflg)
+{
+  return (void *)syscall(__NR_shmat, shmid, shmaddr, shmflg);
+}
+
 int msgget(key_t key, int msgflg)
 {
   return syscall(__NR_msgget, key, msgflg);
@@ -57,6 +67,12 @@ struct shmid_ds; /* #include <linux/shm.h> */
 int shmctl(int shmid, int cmd, struct shmid_ds *buf)
 {
   return syscall(__NR_shmctl, shmid, cmd, buf);
+}
+
+struct sembuf; /* #include <linux/sem.h> */
+int semop(int semid, struct sembuf *sops, unsigned nsops)
+{
+  return syscall(__NR_semop, semid, sops, nsops);
 }
 
 # if __ANDROID_API__ < 21
