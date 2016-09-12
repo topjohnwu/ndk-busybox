@@ -173,6 +173,10 @@ static const char modprobe_longopts[] ALIGN1 =
 #define MODULE_FLAG_BLACKLISTED         0x0008
 #define MODULE_FLAG_BUILTIN             0x0010
 
+#if defined(ANDROID) || defined(__ANDROID__)
+#define DONT_USE_UTS_REL_FOLDER
+#endif
+
 struct globals {
 	llist_t *probes; /* MEs of module(s) requested on cmdline */
 #if ENABLE_FEATURE_CMDLINE_MODULE_OPTIONS
@@ -477,10 +481,17 @@ static int do_modprobe(struct module_entry *m)
 #endif
 
 		if (option_mask32 & OPT_SHOW_DEPS) {
+#ifndef DONT_USE_UTS_REL_FOLDER
 			printf(options ? "insmod %s/%s/%s %s\n"
 					: "insmod %s/%s/%s\n",
 				CONFIG_DEFAULT_MODULES_DIR, G.uts.release, fn,
 				options);
+#else
+			printf(options ? "insmod %s/%s %s\n"
+					: "insmod %s/%s\n",
+				CONFIG_DEFAULT_MODULES_DIR, fn,
+				options);
+#endif
 			free(options);
 			continue;
 		}
@@ -562,6 +573,7 @@ int modprobe_main(int argc UNUSED_PARAM, char **argv)
 	int rc;
 	unsigned opt;
 	struct module_entry *me;
+	struct stat info;
 
 	INIT_G();
 
@@ -573,8 +585,12 @@ int modprobe_main(int argc UNUSED_PARAM, char **argv)
 
 	/* Goto modules location */
 	xchdir(CONFIG_DEFAULT_MODULES_DIR);
+#ifndef DONT_USE_UTS_REL_FOLDER
 	uname(&G.uts);
-	xchdir(G.uts.release);
+	if (stat(G.uts.release, &info) == 0) {
+		xchdir(G.uts.release);
+	}
+#endif
 
 	if (opt & OPT_LIST_ONLY) {
 		int i;
