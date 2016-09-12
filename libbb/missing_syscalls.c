@@ -46,6 +46,19 @@ int semget(key_t key, int nsems, int semflg)
   return syscall(__NR_semget, key, nsems, semflg);
 }
 
+struct msqid_ds; /* #include <linux/msg.h> */
+int msgctl(int msqid, int cmd, struct msqid_ds *buf)
+{
+  return syscall(__NR_msgctl, msqid, cmd, buf);
+}
+
+struct shmid_ds; /* #include <linux/shm.h> */
+// NOTE: IPC_INFO takes a struct shminfo64
+int shmctl(int shmid, int cmd, struct shmid_ds *buf)
+{
+  return syscall(__NR_shmctl, shmid, cmd, buf);
+}
+
 # if __ANDROID_API__ < 21
 int tcdrain(int fd)
 {
