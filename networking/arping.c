@@ -14,6 +14,7 @@
 //applet:IF_ARPING(APPLET(arping, BB_DIR_USR_SBIN, BB_SUID_DROP))
 
 //kbuild:lib-$(CONFIG_ARPING) += arping.o
+//kbuild:lib-$(CONFIG_ARPING) += ether_ntoa_r.o
 
 //usage:#define arping_trivial_usage
 //usage:       "[-fqbDUA] [-c CNT] [-w TIMEOUT] [-I IFACE] [-s SRC_IP] DST_IP"
