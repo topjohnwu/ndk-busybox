@@ -14,6 +14,7 @@ lib-$(CONFIG_UDHCPD)     += common.o packet.o signalpipe.o socket.o
 
 lib-$(CONFIG_UDHCPC)     += dhcpc.o
 lib-$(CONFIG_UDHCPD)     += dhcpd.o arpping.o
+lib-$(CONFIG_UDHCPD)     += ../ether_aton_r.o ../ether_ntoa_r.o
 lib-$(CONFIG_DUMPLEASES) += dumpleases.o
 lib-$(CONFIG_DHCPRELAY)  += dhcprelay.o common.o socket.o packet.o
 
