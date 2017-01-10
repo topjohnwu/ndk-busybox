@@ -40,8 +40,12 @@
 //usage:     "\nSignals:"
 //usage:     "\n	USR1	Update lease file"
 
+#include <sys/types.h>
 #include <netinet/ether.h>
 #include <syslog.h>
+
+#include "../ether_port.h"
+
 #include "common.h"
 #include "dhcpc.h"
 #include "dhcpd.h"
