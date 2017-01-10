@@ -331,6 +331,7 @@
 //applet:IF_BASH_IS_HUSH(APPLET_ODDNAME(bash, hush, BB_DIR_BIN, BB_SUID_DROP, hush))
 
 //kbuild:lib-$(CONFIG_SHELL_HUSH) += hush.o match.o shell_common.o
+//kbuild:lib-$(CONFIG_SHELL_HUSH) += glob.o sigisemptyset.o
 //kbuild:lib-$(CONFIG_HUSH_RANDOM_SUPPORT) += random.o
 
 /* -i (interactive) is also accepted,
@@ -348,7 +349,7 @@
     )
 # include <malloc.h>   /* for malloc_trim */
 #endif
-#include <glob.h>
+#include "glob.h"
 /* #include <dmalloc.h> */
 #if ENABLE_HUSH_CASE
 # include <fnmatch.h>
