@@ -7,7 +7,7 @@
 #include "common.h"
 #include "d6_common.h"
 #include <net/if.h>
-#include <ifaddrs.h>
+#include "ifaddrs.h"
 #include <netpacket/packet.h>
 
 int FAST_FUNC d6_read_interface(
