@@ -40,9 +40,9 @@
 /* X/OPEN tells us to use <sys/{types,ipc,shm}.h> for shmctl() */
 #include <sys/types.h>
 #include <sys/ipc.h>
-#include <sys/sem.h>
-#include <sys/msg.h>
-#include <sys/shm.h>
+#include <linux/sem.h>
+#include <linux/msg.h>
+#include <linux/shm.h>
 
 #include "libbb.h"
 
@@ -88,7 +88,8 @@ struct shm_info {
 /* The last arg of semctl is a union semun, but where is it defined?
    X/OPEN tells us to define it ourselves, but until recently
    Linux include files would also define it. */
-#if defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)
+#if (defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)) || \
+    defined(__ANDROID__)
 /* union semun is defined by including <sys/sem.h> */
 #else
 /* according to X/OPEN we have to define it ourselves */

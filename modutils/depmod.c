@@ -49,7 +49,10 @@ static int FAST_FUNC parse_module(const char *fname, struct stat *sb UNUSED_PARA
 	image = xmalloc_open_zipped_read_close(fname, &len);
 
 	e = moddb_get_or_create(modules, bb_get_last_path_component_nostrip(fname));
-	e->name = xstrdup(fname + 2); /* skip "./" */
+	if (strncmp(fname, "./", 2) == 0)
+		e->name = xstrdup(fname + 2);
+	else
+		e->name = xstrdup(fname);
 
 	for (ptr = image; ptr < image + len - 10; ptr++) {
 		if (is_prefixed_with(ptr, "depends=")) {
