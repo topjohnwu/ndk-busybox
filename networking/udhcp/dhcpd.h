@@ -5,6 +5,8 @@
 #ifndef UDHCP_DHCPD_H
 #define UDHCP_DHCPD_H 1
 
+#include <net/ethernet.h>
+
 PUSH_AND_SET_FUNCTION_VISIBILITY_TO_HIDDEN
 
 /* Defaults you may want to tweak */

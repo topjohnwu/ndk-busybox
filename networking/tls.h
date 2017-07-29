@@ -26,7 +26,7 @@
 #undef  USE_SEED
 /* pstm: multiprecision numbers */
 #undef  DISABLE_PSTM
-#if defined(__GNUC__) && defined(__i386__)
+#if defined(__GNUC__) && defined(__i386__) && !defined(__ANDROID__)
   /* PSTM_X86 works correctly. +25 bytes. */
 # define PSTM_32BIT
 # define PSTM_X86
