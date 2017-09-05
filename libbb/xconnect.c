@@ -12,6 +12,8 @@
 #include <netinet/in.h>
 #include <net/if.h>
 #include <sys/un.h>
+#include <netdb.h>
+#include "../libres/dietdns.h"
 #include "libbb.h"
 
 int FAST_FUNC setsockopt_int(int fd, int level, int optname, int optval)
@@ -282,7 +284,7 @@ IF_NOT_FEATURE_IPV6(sa_family_t af = AF_INET;)
 	 * for each possible socket type (tcp,udp,raw...): */
 	hint.ai_socktype = SOCK_STREAM;
 	hint.ai_flags = ai_flags & ~DIE_ON_ERROR;
-	rc = getaddrinfo(host, NULL, &hint, &result);
+	rc = diet_getaddrinfo(host, NULL, &hint, &result); /* hack to use dietlibc's resolver to work around static compile issue */
 	if (rc || !result) {
 		bb_error_msg("bad address '%s'", org_host);
 		if (ai_flags & DIE_ON_ERROR)
@@ -309,7 +311,7 @@ IF_NOT_FEATURE_IPV6(sa_family_t af = AF_INET;)
 	set_nport(&r->u.sa, htons(port));
  ret:
 	if (result)
-		freeaddrinfo(result);
+		diet_freeaddrinfo(result); /* hack to use dietlibc's resolver to work around static compile issue */
 	return r;
 }
 #if !ENABLE_FEATURE_IPV6

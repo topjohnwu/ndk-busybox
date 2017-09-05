@@ -172,8 +172,8 @@
 
 #if ENABLE_FEATURE_IPC_SYSLOG
 #include <sys/ipc.h>
-#include <sys/sem.h>
-#include <sys/shm.h>
+#include <linux/sem.h>
+#include <linux/shm.h>
 #endif
 
 
