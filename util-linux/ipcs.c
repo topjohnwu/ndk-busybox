@@ -40,9 +40,9 @@
 /* X/OPEN tells us to use <sys/{types,ipc,shm}.h> for shmctl() */
 #include <sys/types.h>
 #include <sys/ipc.h>
-#include <linux/sem.h>
-#include <linux/msg.h>
-#include <linux/shm.h>
+#include <sys/sem.h>
+#include <sys/msg.h>
+#include <sys/shm.h>
 
 #include "libbb.h"
 

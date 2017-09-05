@@ -13,6 +13,7 @@
 #include "utils.h"
 
 #include <netinet/if_ether.h>
+#include <linux/if_ether.h>
 
 /* Please conditionalize exotic protocols on CONFIG_something */
 
