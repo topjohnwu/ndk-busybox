@@ -215,7 +215,7 @@ int ttyname_r(int fd, char *buf, size_t buflen)
 #endif
 
 #ifndef HAVE_ISSETUGID
-int issetugid(void)
+int FAST_FUNC issetugid(void)
 {
 	/* for Bionic, this is sufficient */
 	return 0;
