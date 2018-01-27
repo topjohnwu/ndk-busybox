@@ -29,16 +29,7 @@ COMMON_FILES:= \
 	find_list_entry.o \
 	init_handle.o
 
-DPKG_FILES:= \
-	unpack_ar_archive.o \
-	filter_accept_list_reassign.o \
-	unsafe_prefix.o \
-	get_header_ar.o \
-	get_header_tar.o \
-	get_header_tar_gz.o \
-	get_header_tar_bz2.o \
-	get_header_tar_lzma.o \
-	get_header_tar_xz.o \
+DPKG_FILES:=
 
 INSERT
 

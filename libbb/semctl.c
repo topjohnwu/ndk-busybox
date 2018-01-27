@@ -24,7 +24,7 @@
 
 #include <sys/syscall.h>   /* For __NR_xxx definitions */
 #include <stdarg.h>
-#include <linux/sem.h>
+#include <sys/sem.h>
 #include "libbb.h"
 
 #ifndef __NR_semctl
