@@ -61,6 +61,9 @@ void __dns_readstartfiles(void) {
 #ifdef __BIONIC__
   char propvalue[PROP_VALUE_MAX];
   char propname[PROP_NAME_MAX];
+  char propcmd[PROP_NAME_MAX+8];
+  char pbuf[256];
+  FILE *fp;
   int i;
 #endif
 
@@ -73,7 +76,19 @@ void __dns_readstartfiles(void) {
   for(i = 1; i <= MAX_DNS_PROPERTIES; i++) {
     snprintf(propname, sizeof(propname), "%s%d", DNS_PROP_NAME_PREFIX, i);
     if(__system_property_get(propname, propvalue) < 1) {
-      break;
+      /* attempt to get the property via command instead since the call to Bionic libc failed */
+      snprintf(propcmd, sizeof(propcmd), "getprop %s", propname);
+      if((fp = popen(propcmd, "r"))) {
+        if((fgets(pbuf, sizeof(pbuf)-1, fp) != NULL) && (strlen(pbuf) > 0)) {
+          if (pbuf[strlen(pbuf)-1] == '\n')
+            pbuf[strlen(pbuf)-1] = '\0'; /* strip trailing newline */
+          strncpy(propvalue, pbuf, sizeof(propvalue));
+        }
+      }
+      pclose(fp);
+      memset(&propname[0], 0, sizeof(propname)); /* clear propname to avoid unpredictable behavior */
+      if(strlen(propvalue) < 1)
+        strcpy(propvalue, "8.8.8.8"); /* use a fallback nameserver since we still fail to get the property correctly */
     }
 
     if (parsesockaddr(propvalue,&_diet_res.nsaddr_list[_diet_res.nscount]))
