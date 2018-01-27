@@ -13795,7 +13795,7 @@ procargs(char **argv)
 	}
 	optschanged();
 
-	return login_sh;
+	return 1;
 }
 
 /*
@@ -13915,7 +13915,7 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
 		const char *hp;
 
 		state = 1;
-		read_profile("/etc/profile");
+		read_profile("/system/etc/profile");
  state1:
 		state = 2;
 		hp = lookupvar("HOME");
@@ -13953,6 +13953,9 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
 		if (iflag) {
 			const char *hp = lookupvar("HISTFILE");
 			if (!hp) {
+#ifdef __ANDROID__
+				setvar("HISTFILE", "/mnt/sdcard/ash_history", 0);
+#else
 				hp = lookupvar("HOME");
 				if (hp) {
 					INT_OFF;
@@ -13962,6 +13965,7 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
 					INT_ON;
 					hp = lookupvar("HISTFILE");
 				}
+#endif
 			}
 			if (hp)
 				line_input_state->hist_file = hp;
