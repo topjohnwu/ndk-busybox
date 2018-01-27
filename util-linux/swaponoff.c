@@ -241,7 +241,11 @@ static int do_em_all_in_fstab(void)
 			/* swapon -a should ignore entries with noauto,
 			 * but swapoff -a should process them
 			 */
-			if (do_swapoff || hasmntopt(m, MNTOPT_NOAUTO) == NULL) {
+			if (do_swapoff
+#ifdef MNTOPT_NOAUTO
+			|| hasmntopt(m, MNTOPT_NOAUTO) == NULL
+#endif
+			) {
 				/* each swap space might have different flags */
 				/* save global flags for the next round */
 				save_g_flags();
