@@ -525,6 +525,7 @@ typedef unsigned smalluint;
 # undef HAVE_STRVERSCMP
 # undef HAVE_UNLOCKED_LINE_OPS
 # undef HAVE_NET_ETHERNET_H
+# undef HAVE_SETBIT
 # undef HAVE_PRINTF_PERCENTM
 #endif
 
