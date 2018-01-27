@@ -1,0 +1,11 @@
+# Makefile for busybox
+#
+# Copyright (C) 2012-2012 by Tias Guns <tias@ulyssis.org>
+#
+# Licensed under GPLv2, see file LICENSE in this source tree.
+
+lib-$(CONFIG_NSLOOKUP) += getaddrinfo.o gethostbyname2_r.o freeaddrinfo.o
+lib-$(CONFIG_NSLOOKUP) += dnscruft.o dnscruft2.o dnscruft3.o
+lib-$(CONFIG_NSLOOKUP) += res_init.o res_query.o res_mkquery.o
+lib-$(CONFIG_NSLOOKUP) += h_errno.o gai_strerror.o
+lib-$(CONFIG_NSLOOKUP) += dn_expand.o
