@@ -6,6 +6,7 @@
 #include <asm/types.h>
 #include <linux/netlink.h>
 #include <linux/rtnetlink.h>
+#include <linux/if_ether.h>
 #if !defined IFA_RTA
 #include <linux/if_addr.h>
 #endif

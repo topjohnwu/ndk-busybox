@@ -10,6 +10,7 @@
 #ifndef LIBBB_H
 #define LIBBB_H 1
 
+#include "autoconf.h"
 #include "platform.h"
 
 #include <ctype.h>
