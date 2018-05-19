@@ -21,6 +21,10 @@
 #include "libbb.h"
 #include "modutils.h"
 
+#if defined(ANDROID) || defined(__ANDROID__)
+#define DONT_USE_UTS_REL_FOLDER
+#endif
+
 static const char *const shortcuts[] = {
 	"filename",	// -n
 	"author",	// -a
@@ -64,7 +68,7 @@ static void modinfo(const char *path, const char *version,
 {
 	size_t len;
 	int j;
-	char *ptr, *the_module;
+	char *ptr, *fullpath, *the_module;
 	char *allocated;
 	int tags = option_mask32;
 
@@ -75,8 +79,14 @@ static void modinfo(const char *path, const char *version,
 		if (path[0] == '/')
 			return;
 		/* Newer depmod puts relative paths in modules.dep */
-		path = allocated = xasprintf("%s/%s/%s", CONFIG_DEFAULT_MODULES_DIR, version, path);
-		the_module = xmalloc_open_zipped_read_close(path, &len);
+		fullpath = allocated = xasprintf("%s/%s/%s", CONFIG_DEFAULT_MODULES_DIR, version, path);
+		the_module = xmalloc_open_zipped_read_close(fullpath, &len);
+#ifdef DONT_USE_UTS_REL_FOLDER
+		if (!the_module) {
+			fullpath = allocated = xasprintf("%s/%s", CONFIG_DEFAULT_MODULES_DIR, path);
+			the_module = xmalloc_open_zipped_read_close(fullpath, &len);
+		}
+#endif
 		if (!the_module) {
 			bb_error_msg("module '%s' not found", path);
 			goto ret;
@@ -157,8 +167,22 @@ int modinfo_main(int argc UNUSED_PARAM, char **argv)
 	uname(&uts);
 	parser = config_open2(
 		xasprintf("%s/%s/%s", CONFIG_DEFAULT_MODULES_DIR, uts.release, CONFIG_DEFAULT_DEPMOD_FILE),
-		xfopen_for_read
+		fopen_for_read
 	);
+
+#ifdef DONT_USE_UTS_REL_FOLDER
+	if (!parser) {
+		parser = config_open2(
+			xasprintf("%s/%s", CONFIG_DEFAULT_MODULES_DIR, CONFIG_DEFAULT_DEPMOD_FILE),
+			fopen_for_read
+		);
+	}
+
+	if (!parser) {
+		strcpy(uts.release,"");
+		goto no_modules_dep;
+	}
+#endif
 
 	while (config_read(parser, tokens, 2, 1, "# \t", PARSE_NORMAL)) {
 		colon = last_char_is(tokens[0], ':');
@@ -176,6 +200,7 @@ int modinfo_main(int argc UNUSED_PARAM, char **argv)
 	if (ENABLE_FEATURE_CLEAN_UP)
 		config_close(parser);
 
+no_modules_dep:
 	for (i = 0; argv[i]; i++) {
 		if (argv[i][0]) {
 			modinfo(argv[i], uts.release, field);
