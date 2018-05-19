@@ -22,10 +22,14 @@
 // syscall used by syslogd, ipcrm, ipcs
 //kbuild:lib-y += semctl.o
 
+#include "libbb.h"
 #include <sys/syscall.h>   /* For __NR_xxx definitions */
 #include <stdarg.h>
+#ifdef __NDK_MAJOR__ < 17
+#include <sys/sem.h>
+#else
 #include <linux/sem.h>
-#include "libbb.h"
+#endif
 
 #ifndef __NR_semctl
 #define __NR_semctl 66

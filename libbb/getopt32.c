@@ -6,10 +6,10 @@
  *
  * Licensed under GPLv2 or later, see file LICENSE in this source tree.
  */
+#include "libbb.h"
 #if ENABLE_LONG_OPTS
 # include <getopt.h>
 #endif
-#include "libbb.h"
 
 //kbuild:lib-y += getopt32.o
 

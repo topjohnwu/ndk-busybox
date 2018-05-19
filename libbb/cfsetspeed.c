@@ -19,6 +19,8 @@
 //kbuild:lib-$(CONFIG_MICROCOM) += cfsetspeed.o
 //kbuild:lib-$(CONFIG_GETTY) += cfsetspeed.o
 
+#include "libbb.h"
+
 #include <termios.h>
 #include <errno.h>
 #include <stddef.h>
@@ -138,7 +140,7 @@ static const struct speed_struct speeds[] =
 #endif
   };
 
-
+#if __NDK_MAJOR__ < 17
 /* Set both the input and output baud rates stored in *TERMIOS_P to SPEED.  */
 int
 cfsetspeed (struct termios *termios_p, speed_t speed)
@@ -163,3 +165,4 @@ cfsetspeed (struct termios *termios_p, speed_t speed)
 
   return -1;
 }
+#endif

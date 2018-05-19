@@ -299,6 +299,8 @@
 
 #define TRACEROUTE_SO_DEBUG 0
 
+#include "libbb.h"
+
 #include <net/if.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -316,7 +318,6 @@
 # endif
 #endif
 
-#include "libbb.h"
 #include "inet_common.h"
 
 #ifndef IPPROTO_ICMP

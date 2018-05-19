@@ -19,16 +19,22 @@
 
 //kbuild:lib-$(CONFIG_IPCS) += ipcs.o
 
+#include "libbb.h"
+
 /* X/OPEN tells us to use <sys/{types,ipc,sem}.h> for semctl() */
 /* X/OPEN tells us to use <sys/{types,ipc,msg}.h> for msgctl() */
 /* X/OPEN tells us to use <sys/{types,ipc,shm}.h> for shmctl() */
 #include <sys/types.h>
 #include <sys/ipc.h>
-#include <linux/sem.h>
-#include <linux/msg.h>
+#if __NDK_MAJOR__ < 17
 #include <linux/shm.h>
-
-#include "libbb.h"
+#include <linux/msg.h>
+#include <linux/sem.h>
+#else
+#include <sys/shm.h>
+#include <sys/msg.h>
+#include <sys/sem.h>
+#endif
 
 /*-------------------------------------------------------------------*/
 /* SHM_DEST and SHM_LOCKED are defined in kernel headers,

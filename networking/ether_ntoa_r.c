@@ -18,6 +18,7 @@
    02111-1307 USA.  */
 
 #include <stdio.h>
+#include <net/ethernet.h>
 #include <netinet/ether.h>
 #include <netinet/if_ether.h>
 
