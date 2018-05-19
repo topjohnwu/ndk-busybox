@@ -87,6 +87,7 @@
 
 #include "libbb.h"
 #include <netpacket/packet.h>
+#include <net/ethernet.h>
 #include <netinet/ether.h>
 #include <netinet/if_ether.h>
 #include <linux/if.h>

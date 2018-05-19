@@ -42,7 +42,9 @@
 #include <netinet/ether.h>
 #include <syslog.h>
 
+#ifdef __NDK_VERSION__ < 17
 #include "../ether_port.h"
+#endif
 
 #include "common.h"
 #include "dhcpc.h"

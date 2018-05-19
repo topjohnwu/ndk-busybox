@@ -7,6 +7,13 @@
 #ifndef BB_PLATFORM_H
 #define BB_PLATFORM_H 1
 
+/* Check for NDK version */
+#ifdef __ANDROID__
+# include <android/api-level.h>
+# ifdef __ANDROID_NDK__
+#  include <android/ndk-version.h>
+# endif
+#endif
 
 /* Convenience macros to test the version of gcc. */
 #undef __GNUC_PREREQ
@@ -120,7 +127,7 @@
  * (-DFAST_FUNC= )
  */
 #ifndef FAST_FUNC
-# if __GNUC_PREREQ(3,0) && defined(i386)
+# if !defined(__ANDROID__) && __GNUC_PREREQ(3,0) && defined(i386)
 /* stdcall makes callee to pop arguments from stack, not caller */
 #  define FAST_FUNC __attribute__((regparm(3),stdcall))
 /* #elif ... - add your favorite arch today! */
@@ -527,6 +534,9 @@ typedef unsigned smalluint;
 #  undef HAVE_STPCPY
 # else
 #  undef HAVE_WAIT3
+# endif
+# if __NDK_MAJOR__ >= 17
+#  define HAVE_GETLINE 1
 # endif
 # undef HAVE_MEMPCPY
 # undef HAVE_STRCHRNUL

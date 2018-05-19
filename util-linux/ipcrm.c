@@ -24,9 +24,15 @@
 /* X/OPEN tells us to use <sys/{types,ipc,sem}.h> for semctl() */
 /* X/OPEN tells us to use <sys/{types,ipc,msg}.h> for msgctl() */
 #include <sys/ipc.h>
+#if __NDK_MAJOR__ < 16
 #include <linux/shm.h>
 #include <linux/msg.h>
 #include <linux/sem.h>
+#else
+#include <sys/shm.h>
+#include <sys/msg.h>
+#include <sys/sem.h>
+#endif
 
 #if (defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)) || \
     defined(__ANDROID__)

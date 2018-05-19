@@ -19,6 +19,7 @@
 
 #include <ctype.h>
 #include <sys/types.h>
+#include <net/ethernet.h>
 #include <netinet/ether.h>
 #include <netinet/if_ether.h>
 
