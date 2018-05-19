@@ -54,6 +54,8 @@ struct minix_dir_entry {
 /* Believe it or not, but mount.h has this one #defined */
 #undef BLOCK_SIZE
 
+#undef MINIX2_SUPER_MAGIC
+#undef MINIX2_SUPER_MAGIC2
 enum {
 	BLOCK_SIZE              = 1024,
 	BITS_PER_BLOCK          = BLOCK_SIZE << 3,
