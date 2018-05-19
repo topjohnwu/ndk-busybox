@@ -168,7 +168,8 @@ struct mntent *getmntent_r (FILE *stream, struct mntent *mp, char *buffer, int b
   return mp;
 }
 
-struct mntent *getmntent (FILE *stream)
+/* override getmntent definition in bionic/stubs.c using platform.h */
+struct mntent *bb_getmntent (FILE *stream)
 {
   static struct mntent m;
   static char *getmntent_buffer;
