@@ -129,11 +129,13 @@
 #endif
 
 #if ENABLE_FEATURE_IPV6
+#ifndef __BIONIC__
 struct in6_ifreq {
 	struct in6_addr ifr6_addr;
 	uint32_t ifr6_prefixlen;
 	int ifr6_ifindex;
 };
+#endif
 #endif
 
 /*
