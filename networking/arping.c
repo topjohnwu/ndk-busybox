@@ -38,6 +38,7 @@
 #include <net/if.h>
 #include <netinet/ether.h>
 #include <netpacket/packet.h>
+#include <linux/if_arp.h> /* for arphdr */
 
 #include "libbb.h"
 #include "common_bufsiz.h"
