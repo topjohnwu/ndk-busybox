@@ -36,8 +36,9 @@
 
 #include <resolv.h>
 #include <net/if.h>	/* for IFNAMSIZ */
-//#include <arpa/inet.h>
-//#include <netdb.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include "../libres/dietdns.h"
 #include "libbb.h"
 #include "common_bufsiz.h"
 
@@ -106,7 +107,7 @@ static int print_host(const char *hostname, const char *header)
 	 * for each possible socket type (tcp,udp,raw...): */
 	hint.ai_socktype = SOCK_STREAM;
 	// hint.ai_flags = AI_CANONNAME;
-	rc = getaddrinfo(hostname, NULL /*service*/, &hint, &result);
+	rc = diet_getaddrinfo(hostname, NULL /*service*/, &hint, &result);
 
 	if (rc == 0) {
 		struct addrinfo *cur = result;
@@ -137,7 +138,7 @@ static int print_host(const char *hostname, const char *header)
 #endif
 	}
 	if (ENABLE_FEATURE_CLEAN_UP && result)
-		freeaddrinfo(result);
+		diet_freeaddrinfo(result);
 	return (rc != 0);
 }
 
@@ -147,11 +148,11 @@ static void server_print(void)
 	char *server;
 	struct sockaddr *sa;
 
-#if ENABLE_FEATURE_IPV6
-	sa = (struct sockaddr*)_res._u._ext.nsaddrs[0];
+#if 0
+	sa = (struct sockaddr*)_diet_res._u._ext.nsaddrs[0];
 	if (!sa)
 #endif
-		sa = (struct sockaddr*)&_res.nsaddr_list[0];
+		sa = (struct sockaddr*)&_diet_res.nsaddr_list[0];
 	server = xmalloc_sockaddr2dotted_noport(sa);
 
 	print_host(server, "Server:");
@@ -173,11 +174,11 @@ static void set_default_dns(const char *server)
 	lsa = xhost2sockaddr(server, 53);
 
 	if (lsa->u.sa.sa_family == AF_INET) {
-		_res.nscount = 1;
+		_diet_res.nscount = 1;
 		/* struct copy */
-		_res.nsaddr_list[0] = lsa->u.sin;
+		_diet_res.nsaddr_list[0] = lsa->u.sin;
 	}
-#if ENABLE_FEATURE_IPV6
+#if 0
 	/* Hoped libc can cope with IPv4 address there too.
 	 * No such luck, glibc 2.4 segfaults even with IPv6,
 	 * maybe I misunderstand how to make glibc use IPv6 addr?
@@ -186,9 +187,9 @@ static void set_default_dns(const char *server)
 		// glibc neither SEGVs nor sends any dgrams with this
 		// (strace shows no socket ops):
 		//_res.nscount = 0;
-		_res._u._ext.nscount = 1;
+		_diet_res._u._ext.nscount = 1;
 		/* store a pointer to part of malloc'ed lsa */
-		_res._u._ext.nsaddrs[0] = &lsa->u.sin6;
+		_diet_res._u._ext.nsaddrs[0] = &lsa->u.sin6;
 		/* must not free(lsa)! */
 	}
 #endif
@@ -207,7 +208,7 @@ int nslookup_main(int argc, char **argv)
 
 	/* initialize DNS structure _res used in printing the default
 	 * name server and in the explicit name server option feature. */
-	res_init();
+	diet_res_init();
 	/* rfc2133 says this enables IPv6 lookups */
 	/* (but it also says "may be enabled in /etc/resolv.conf") */
 	/*_res.options |= RES_USE_INET6;*/
