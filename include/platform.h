@@ -124,7 +124,7 @@
  * (-DFAST_FUNC= )
  */
 #ifndef FAST_FUNC
-# if __GNUC_PREREQ(3,0) && defined(i386)
+# if !defined(__ANDROID__) && __GNUC_PREREQ(3,0) && defined(i386)
 /* stdcall makes callee to pop arguments from stack, not caller */
 #  define FAST_FUNC __attribute__((regparm(3),stdcall))
 /* #elif ... - add your favorite arch today! */
