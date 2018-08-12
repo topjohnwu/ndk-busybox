@@ -35,6 +35,8 @@
 //kbuild:lib-$(CONFIG_SWITCH_ROOT) += switch_root.o
 //kbuild:lib-$(CONFIG_RUN_INIT)    += switch_root.o
 
+#include "libbb.h"
+
 #include <sys/vfs.h>
 #include <sys/mount.h>
 #if ENABLE_RUN_INIT
@@ -55,8 +57,6 @@ extern int capget(cap_user_header_t header, const cap_user_data_t data);
 // so for bbox, let's just repeat the declarations.
 // This way, libcap needs not be installed in build environment.
 #endif
-
-#include "libbb.h"
 
 // Make up for header deficiencies
 #ifndef RAMFS_MAGIC

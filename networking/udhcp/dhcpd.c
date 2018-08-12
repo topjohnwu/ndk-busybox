@@ -42,8 +42,6 @@
 #include <netinet/ether.h>
 #include <syslog.h>
 
-#include "../ether_port.h"
-
 #include "common.h"
 #include "dhcpc.h"
 #include "dhcpd.h"

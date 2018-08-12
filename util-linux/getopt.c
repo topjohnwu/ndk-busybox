@@ -105,10 +105,10 @@
 //usage:       " esac\n"
 //usage:       "done\n"
 
+#include "libbb.h"
 #if ENABLE_FEATURE_GETOPT_LONG
 # include <getopt.h>
 #endif
-#include "libbb.h"
 
 /* NON_OPT is the code that is returned when a non-option is found in '+'
    mode */

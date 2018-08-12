@@ -78,6 +78,8 @@
 // --selinux-label <label>  set SELinux label
 // --apparmor-profile <pr>  set AppArmor profile
 
+#include "libbb.h"
+
 #if ENABLE_FEATURE_SETPRIV_CAPABILITIES
 #include <linux/capability.h>
 // #include <sys/capability.h>
@@ -90,7 +92,6 @@ extern int capget(cap_user_header_t header, const cap_user_data_t data);
 // This way, libcap needs not be installed in build environment.
 #endif
 #include <sys/prctl.h>
-#include "libbb.h"
 
 #ifndef PR_CAPBSET_READ
 #define PR_CAPBSET_READ 23

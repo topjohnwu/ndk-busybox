@@ -142,7 +142,7 @@ int semop(int semid, struct sembuf *sops, unsigned nsops)
   return syscall(__NR_semop, semid, sops, nsops);
 }
 
-# if __ANDROID_API__ < 21
+# if __ANDROID_API__ < 21 && __NDK_MAJOR__ < 16
 int tcdrain(int fd)
 {
 	return ioctl(fd, TCSBRK, 1);

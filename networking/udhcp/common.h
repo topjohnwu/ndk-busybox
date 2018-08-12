@@ -10,8 +10,10 @@
 
 #include "libbb.h"
 #include "common_bufsiz.h"
+#include <net/ethernet.h>
 #include <netinet/udp.h>
 #include <netinet/ip.h>
+#include <linux/if_ether.h>
 
 PUSH_AND_SET_FUNCTION_VISIBILITY_TO_HIDDEN
 

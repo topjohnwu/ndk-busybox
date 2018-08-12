@@ -7,6 +7,7 @@
  * in linux/[rt]netlink.h. 2.6.19 seems to be ok, though */
 #include <linux/netlink.h>
 #include <linux/rtnetlink.h>
+#include <linux/if_ether.h>
 
 PUSH_AND_SET_FUNCTION_VISIBILITY_TO_HIDDEN
 
