@@ -118,6 +118,11 @@ int semget(key_t key, int nsems, int semflg)
   return syscall(__NR_semget, key, nsems, semflg);
 }
 
+ssize_t readahead(int fd, off64_t offset, size_t count)
+{
+  return syscall(__NR_readahead, fd, offset, count);
+}
+
 struct msqid_ds; /* #include <linux/msg.h> */
 int msgctl(int msqid, int cmd, struct msqid_ds *buf)
 {
