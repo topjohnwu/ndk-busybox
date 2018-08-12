@@ -39,6 +39,16 @@ int pivot_root(const char *new_root, const char *put_old)
 	return syscall(__NR_pivot_root, new_root, put_old);
 }
 
+int swapoff(const char *path)
+{
+  return syscall(__NR_swapoff, path);
+}
+
+int swapon(const char *path, int swapflags)
+{
+  return syscall(__NR_swapon, path, swapflags);
+}
+
 # if __ANDROID_API__ < 21
 int tcdrain(int fd)
 {
