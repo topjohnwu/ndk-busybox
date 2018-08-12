@@ -66,6 +66,11 @@
 #if defined(ANDROID) || defined(__ANDROID__)
 # define endpwent() ((void)0)
 # define endgrent() ((void)0)
+# if __ANDROID_API__ < 21
+#  define BLKDISCARD _IO(0x12,119)
+#  define BLKDISCARDZEROES _IO(0x12,124)
+#  define BLKSECDISCARD _IO(0x12,125)
+# endif
 #endif
 #ifdef HAVE_MNTENT_H
 # include <mntent.h>
