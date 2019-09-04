@@ -180,8 +180,7 @@ struct lineedit_statics {
 #endif
 };
 
-/* See lineedit_ptr_hack.c */
-extern struct lineedit_statics *const lineedit_ptr_to_statics;
+extern struct lineedit_statics *BB_GLOBAL_CONST lineedit_ptr_to_statics;
 
 #define S (*lineedit_ptr_to_statics)
 #define state            (S.state           )

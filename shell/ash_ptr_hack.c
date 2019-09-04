@@ -22,8 +22,8 @@ struct globals_var      *ash_ptr_to_globals_var;
 /* gcc -combine will see through and complain */
 /* Using alternative method which is more likely to break
  * on weird architectures, compilers, linkers and so on */
-struct globals_misc     *const ash_ptr_to_globals_misc __attribute__ ((section (".data")));
-struct globals_memstack *const ash_ptr_to_globals_memstack __attribute__ ((section (".data")));
-struct globals_var      *const ash_ptr_to_globals_var __attribute__ ((section (".data")));
+struct globals_misc     *BB_GLOBAL_CONST ash_ptr_to_globals_misc __attribute__ ((section (".data")));
+struct globals_memstack *BB_GLOBAL_CONST ash_ptr_to_globals_memstack __attribute__ ((section (".data")));
+struct globals_var      *BB_GLOBAL_CONST ash_ptr_to_globals_var __attribute__ ((section (".data")));
 
 #endif

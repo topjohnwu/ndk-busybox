@@ -18,6 +18,6 @@ struct lineedit_statics *lineedit_ptr_to_statics;
 /* gcc -combine will see through and complain */
 /* Using alternative method which is more likely to break
  * on weird architectures, compilers, linkers and so on */
-struct lineedit_statics *const lineedit_ptr_to_statics __attribute__ ((section (".data")));
+struct lineedit_statics *BB_GLOBAL_CONST lineedit_ptr_to_statics __attribute__ ((section (".data")));
 
 #endif

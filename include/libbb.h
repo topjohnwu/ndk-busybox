@@ -338,10 +338,33 @@ struct BUG_off_t_size_is_misdetected {
 #endif
 #endif
 
+/* We use a trick to have more optimized code (fewer pointer reloads). E.g.:
+ *  ash.c:   extern struct globals *const ash_ptr_to_globals;
+ *  ash_ptr_hack.c: struct globals *ash_ptr_to_globals;
+ * This way, compiler in ash.c knows the pointer cannot change.
+ *
+ * However, this relies on C undefined behavior, so we whitelist compilers
+ * where we know this isn't problematic, by using the the BB_GLOBAL_CONST
+ * preprocessor definition.
+ * If you are sure this trick also works with your toolchain you can add
+ * "-DBB_GLOBAL_CONST='const'" to CONFIG_EXTRA_CFLAGS or add your compiler to
+ * the whitelist below.
+ */
+
+#ifndef BB_GLOBAL_CONST
+# if defined(__clang__)
+#  define BB_GLOBAL_CONST
+# elif defined(__GNUC__)
+#  define BB_GLOBAL_CONST const
+# else
+#  define BB_GLOBAL_CONST
+# endif
+#endif
+
 #if defined(__GLIBC__)
 /* glibc uses __errno_location() to get a ptr to errno */
 /* We can just memorize it once - no multithreading in busybox :) */
-extern int *const bb_errno;
+extern int *BB_GLOBAL_CONST bb_errno;
 #undef errno
 #define errno (*bb_errno)
 #endif
@@ -2109,7 +2132,7 @@ struct globals;
 /* '*const' ptr makes gcc optimize code much better.
  * Magic prevents ptr_to_globals from going into rodata.
  * If you want to assign a value, use SET_PTR_TO_GLOBALS(x) */
-extern struct globals *const ptr_to_globals;
+extern struct globals *BB_GLOBAL_CONST ptr_to_globals;
 /* At least gcc 3.4.6 on mipsel system needs optimization barrier */
 #define barrier() __asm__ __volatile__("":::"memory")
 #define SET_PTR_TO_GLOBALS(x) do { \

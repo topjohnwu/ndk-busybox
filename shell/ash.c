@@ -288,19 +288,6 @@ typedef long arith_t;
 # error "Do not even bother, ash will not run on NOMMU machine"
 #endif
 
-/* We use a trick to have more optimized code (fewer pointer reloads):
- *  ash.c:   extern struct globals *const ash_ptr_to_globals;
- *  ash_ptr_hack.c: struct globals *ash_ptr_to_globals;
- * This way, compiler in ash.c knows the pointer can not change.
- *
- * However, this may break on weird arches or toolchains. In this case,
- * set "-DBB_GLOBAL_CONST=''" in CONFIG_EXTRA_CFLAGS to disable
- * this optimization.
- */
-#ifndef BB_GLOBAL_CONST
-# define BB_GLOBAL_CONST const
-#endif
-
 
 /* ============ Hash table sizes. Configurable. */
 

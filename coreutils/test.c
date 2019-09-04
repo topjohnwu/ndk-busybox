@@ -400,8 +400,7 @@ struct test_statics {
 	jmp_buf leaving;
 };
 
-/* See test_ptr_hack.c */
-extern struct test_statics *const test_ptr_to_statics;
+extern struct test_statics *BB_GLOBAL_CONST test_ptr_to_statics;
 
 #define S (*test_ptr_to_statics)
 #define args            (S.args         )

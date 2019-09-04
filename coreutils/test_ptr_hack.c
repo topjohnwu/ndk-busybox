@@ -18,6 +18,6 @@ struct test_statics *test_ptr_to_statics;
 /* gcc -combine will see through and complain */
 /* Using alternative method which is more likely to break
  * on weird architectures, compilers, linkers and so on */
-struct test_statics *const test_ptr_to_statics __attribute__ ((section (".data")));
+struct test_statics *BB_GLOBAL_CONST test_ptr_to_statics __attribute__ ((section (".data")));
 
 #endif

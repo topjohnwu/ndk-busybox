@@ -25,7 +25,7 @@ int *bb_errno;
 /* gcc -combine will see through and complain */
 /* Using alternative method which is more likely to break
  * on weird architectures, compilers, linkers and so on */
-struct globals *const ptr_to_globals __attribute__ ((section (".data")));
+struct globals *BB_GLOBAL_CONST ptr_to_globals __attribute__ ((section (".data")));
 
 #ifdef __GLIBC__
 int *const bb_errno __attribute__ ((section (".data")));
