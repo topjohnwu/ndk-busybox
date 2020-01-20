@@ -120,7 +120,7 @@
  * (-DFAST_FUNC= )
  */
 #ifndef FAST_FUNC
-# if __GNUC_PREREQ(3,0) && defined(i386)
+# if !defined(__ANDROID__) && __GNUC_PREREQ(3,0) && defined(i386)
 /* stdcall makes callee to pop arguments from stack, not caller */
 #  define FAST_FUNC __attribute__((regparm(3),stdcall))
 /* #elif ... - add your favorite arch today! */
@@ -417,6 +417,8 @@ typedef unsigned smalluint;
 #define HAVE_NET_ETHERNET_H 1
 #define HAVE_SYS_STATFS_H 1
 #define HAVE_PRINTF_PERCENTM 1
+#define HAVE_WAIT3 1
+#define HAVE_ISSETUGID 1
 
 #if defined(__UCLIBC__)
 # if UCLIBC_VERSION < KERNEL_VERSION(0, 9, 32)
@@ -520,10 +522,15 @@ typedef unsigned smalluint;
 # else
    /* ANDROID >= 21 has standard dprintf */
 # endif
+# if __ANDROID_API__ > 18
+#  undef HAVE_ISSETUGID
+# endif
 # if __ANDROID_API__ < 21
 #  undef HAVE_TTYNAME_R
 #  undef HAVE_GETLINE
 #  undef HAVE_STPCPY
+# else
+#  undef HAVE_WAIT3
 # endif
 # undef HAVE_MEMPCPY
 # undef HAVE_STRCHRNUL
@@ -531,6 +538,7 @@ typedef unsigned smalluint;
 # undef HAVE_UNLOCKED_LINE_OPS
 # undef HAVE_NET_ETHERNET_H
 # undef HAVE_PRINTF_PERCENTM
+# undef HAVE_SETBIT
 #endif
 
 /*
@@ -609,6 +617,16 @@ extern int vasprintf(char **string_ptr, const char *format, va_list p) FAST_FUNC
 # include <stdio.h> /* for FILE */
 # include <sys/types.h> /* size_t */
 extern ssize_t getline(char **lineptr, size_t *n, FILE *stream) FAST_FUNC;
+#endif
+
+#ifndef HAVE_WAIT3
+/* Wrap wait3() to wait4() for libc implementations without (e.g. Bionic on ANDROID >= 21) */
+# include <sys/wait.h> /* for rusage */
+static pid_t wait3(int* status, int options, struct rusage* rusage) { return wait4(-1, status, options, rusage); }
+#endif
+
+#ifndef HAVE_ISSETUGID
+extern int issetugid(void) FAST_FUNC;
 #endif
 
 #endif
