@@ -279,16 +279,14 @@ typedef long arith_t;
 #endif
 
 #include "NUM_APPLETS.h"
-#if NUM_APPLETS == 1
-/* STANDALONE does not make sense, and won't compile */
-# undef CONFIG_FEATURE_SH_STANDALONE
-# undef ENABLE_FEATURE_SH_STANDALONE
-# undef IF_FEATURE_SH_STANDALONE
-# undef IF_NOT_FEATURE_SH_STANDALONE
-# define ENABLE_FEATURE_SH_STANDALONE 0
-# define IF_FEATURE_SH_STANDALONE(...)
-# define IF_NOT_FEATURE_SH_STANDALONE(...) __VA_ARGS__
-#endif
+
+/* Magisk: Force enable standalone mode as it can be toggled at runtime */
+#undef ENABLE_FEATURE_SH_STANDALONE
+#undef IF_FEATURE_SH_STANDALONE
+#undef IF_NOT_FEATURE_SH_STANDALONE
+#define ENABLE_FEATURE_SH_STANDALONE 1
+#define IF_FEATURE_SH_STANDALONE(...) __VA_ARGS__
+#define IF_NOT_FEATURE_SH_STANDALONE(...)
 
 #ifndef F_DUPFD_CLOEXEC
 # define F_DUPFD_CLOEXEC F_DUPFD
@@ -344,7 +342,9 @@ static const char *const optletters_optnames[] ALIGN_PTR = {
 	"b"   "notify",
 	"u"   "nounset",
 	"E"   "errtrace",
-	"\0"  "vi"
+	"\0"  "vi",
+/* Magisk: toggle whether use standalone shell mode */
+	"\0"  "standalone"
 #if BASH_PIPEFAIL
 	,"\0"  "pipefail"
 #endif
@@ -441,14 +441,15 @@ struct globals_misc {
 #define uflag optlist[13]
 #define Eflag optlist[14]
 #define viflag optlist[15]
+#define saflag optlist[16]
 #if BASH_PIPEFAIL
-# define pipefail optlist[16]
+# define pipefail optlist[17]
 #else
 # define pipefail 0
 #endif
 #if DEBUG
-# define nolog optlist[16 + BASH_PIPEFAIL]
-# define debug optlist[17 + BASH_PIPEFAIL]
+# define nolog optlist[17 + BASH_PIPEFAIL]
+# define debug optlist[18 + BASH_PIPEFAIL]
 #endif
 
 	/* trap handler commands */
@@ -8256,7 +8257,7 @@ static void
 tryexec(IF_FEATURE_SH_STANDALONE(int applet_no,) const char *cmd, char **argv, char **envp)
 {
 #if ENABLE_FEATURE_SH_STANDALONE
-	if (applet_no >= 0) {
+	if (saflag && applet_no >= 0) {
 		if (APPLET_IS_NOEXEC(applet_no)) {
 			clearenv();
 			while (*envp)
@@ -8325,7 +8326,7 @@ static void shellexec(char *prog, char **argv, const char *path, int idx)
 	envp = listvars(VEXPORT, VUNSET, /*strlist:*/ NULL, /*end:*/ NULL);
 	if (strchr(prog, '/') != NULL
 #if ENABLE_FEATURE_SH_STANDALONE
-	 || (applet_no = find_applet_by_name(prog)) >= 0
+	 || (saflag && (applet_no = find_applet_by_name(prog)) >= 0)
 #endif
 	) {
 		tryexec(IF_FEATURE_SH_STANDALONE(applet_no,) prog, argv, envp);
@@ -13823,7 +13824,7 @@ find_command(char *name, struct cmdentry *entry, int act, const char *path)
 		goto fail;
 
 #if ENABLE_FEATURE_SH_STANDALONE
-	{
+	if (saflag) {
 		int applet_no = find_applet_by_name(name);
 		if (applet_no >= 0) {
 			entry->cmdtype = CMDNORMAL;
@@ -14045,7 +14046,7 @@ helpcmd(int argc UNUSED_PARAM, char **argv UNUSED_PARAM)
 		}
 	}
 # if ENABLE_FEATURE_SH_STANDALONE
-	{
+	if (saflag) {
 		const char *a = applet_names;
 		while (*a) {
 			col += out1fmt("%c%s", ((col == 0) ? '\t' : ' '), a);
@@ -14708,6 +14709,11 @@ int ash_main(int argc UNUSED_PARAM, char **argv)
 	TRACE(("Shell args: "));
 	trace_puts_args(argv);
 #endif
+
+	char *ash_sa = getenv("ASH_STANDALONE");
+	if (ash_sa && strcmp(ash_sa, "1") == 0)
+		/* Magisk: toggle standalone shell with environment ASH_STANDALONE */
+		saflag = 1;
 
 	if (login_sh) {
 		const char *hp;
