@@ -333,7 +333,7 @@ static const char *const optletters_optnames[] = {
 	"u"   "nounset",
 	"\0"  "vi",
 /* Magisk: toggle whether use standalone shell mode */
-	"\0"  "standalone"
+	"S"  "standalone"
 #if BASH_PIPEFAIL
 	,"\0"  "pipefail"
 #endif
