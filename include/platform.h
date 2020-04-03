@@ -549,8 +549,10 @@ typedef unsigned smalluint;
 # if __ANDROID_API__ >= 21
 #  undef HAVE_WAIT3
 # endif
+# if __ANDROID_API__ < 24
+#  undef HAVE_STRCHRNUL
+# endif
 # undef HAVE_MEMPCPY
-# undef HAVE_STRCHRNUL
 # undef HAVE_STRVERSCMP
 # undef HAVE_UNLOCKED_LINE_OPS
 # undef HAVE_NET_ETHERNET_H
