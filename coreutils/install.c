@@ -34,12 +34,14 @@
 //usage:     "\n	-g GRP	Set group ownership"
 //usage:     "\n	-m MODE	Set permissions"
 //usage:     "\n	-t DIR	Install to DIR"
-//usage:	IF_SELINUX(
-//usage:     "\n	-Z	Set security context"
-//usage:	)
 
 #include "libbb.h"
 #include "libcoreutils/coreutils.h"
+
+// Force disable SELinux features for this applet
+#undef ENABLE_SELINUX
+#undef IF_SELINUX
+#define IF_SELINUX(...)
 
 #if ENABLE_FEATURE_INSTALL_LONG_OPTIONS
 static const char install_longopts[] ALIGN1 =
