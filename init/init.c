@@ -1107,7 +1107,7 @@ int init_main(int argc UNUSED_PARAM, char **argv)
 	/* Make sure environs is set to something sane */
 	putenv((char *) "HOME=/");
 	putenv((char *) bb_PATH_root_path);
-	putenv((char *) "SHELL=/bin/sh");
+	putenv((char *) "SHELL=/sbin/sh");
 	putenv((char *) "USER=root"); /* needed? why? */
 
 	if (argv[1])
