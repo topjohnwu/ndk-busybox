@@ -55,6 +55,7 @@
 
 #ifdef HAVE_AFINET6
 # ifndef _LINUX_IN6_H
+#  ifndef __BIONIC__
 /*
  * This is from linux/include/net/ipv6.h
  */
@@ -63,6 +64,7 @@ struct in6_ifreq {
 	uint32_t ifr6_prefixlen;
 	unsigned int ifr6_ifindex;
 };
+#  endif
 # endif
 #endif /* HAVE_AFINET6 */
 
