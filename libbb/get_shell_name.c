@@ -17,6 +17,10 @@ const char* FAST_FUNC get_shell_name(void)
 	if (shell && shell[0])
 		return shell;
 
+#ifdef __ANDROID__
+	return DEFAULT_SHELL_SHORT_NAME;
+#endif
+
 	pw = getpwuid(getuid());
 	if (pw && pw->pw_shell && pw->pw_shell[0])
 		return pw->pw_shell;
