@@ -120,6 +120,7 @@ lib-y += xrealloc_vector.o
 
 # for android-busybox-ndk
 lib-y += mntent_r.o
+lib-y += wrap_funcs.o
 
 lib-$(CONFIG_MOUNT) += match_fstype.o
 lib-$(CONFIG_UMOUNT) += match_fstype.o
