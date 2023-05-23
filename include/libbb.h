@@ -2341,12 +2341,12 @@ void XZALLOC_CONST_PTR(const void *pptr, size_t size) FAST_FUNC;
  * use bb_default_login_shell and following defines.
  * If you change LIBBB_DEFAULT_LOGIN_SHELL,
  * don't forget to change increment constant. */
-#define LIBBB_DEFAULT_LOGIN_SHELL  "-/bin/sh"
+#define LIBBB_DEFAULT_LOGIN_SHELL  "-/system/bin/sh"
 extern const char bb_default_login_shell[] ALIGN1;
 /* "/bin/sh" */
 #define DEFAULT_SHELL              (bb_default_login_shell+1)
 /* "sh" */
-#define DEFAULT_SHELL_SHORT_NAME   (bb_default_login_shell+6)
+#define DEFAULT_SHELL_SHORT_NAME   (bb_default_login_shell+13)
 
 /* The following devices are the same on all systems.  */
 #define CURRENT_TTY "/dev/tty"
