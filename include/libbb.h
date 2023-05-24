@@ -2390,9 +2390,15 @@ extern const char bb_default_login_shell[] ALIGN1;
 # define VC_4 "/dev/tty4"
 # define VC_5 "/dev/tty5"
 # define VC_FORMAT "/dev/tty%d"
-# define LOOP_FORMAT "/dev/loop%u"
-# define LOOP_NAMESIZE (sizeof("/dev/loop") + sizeof(int)*3 + 1)
-# define LOOP_NAME "/dev/loop"
+# if defined(__ANDROID__)
+#  define LOOP_FORMAT "/dev/block/loop%u"
+#  define LOOP_NAMESIZE (sizeof("/dev/block/loop") + sizeof(int)*3 + 1)
+#  define LOOP_NAME "/dev/block/loop"
+# else
+#  define LOOP_FORMAT "/dev/loop%u"
+#  define LOOP_NAMESIZE (sizeof("/dev/loop") + sizeof(int)*3 + 1)
+#  define LOOP_NAME "/dev/loop"
+# endif
 # define FB_0 "/dev/fb0"
 #endif
 
