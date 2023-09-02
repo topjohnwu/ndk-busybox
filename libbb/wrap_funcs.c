@@ -28,11 +28,13 @@
 
 #include <sys/param.h>
 #include <sys/stat.h>
+#include <sys/syscall.h>
 
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 char * __wrap_realpath(const char * __restrict path, char * __restrict resolved)
 {
@@ -218,4 +220,16 @@ char * __wrap_realpath(const char * __restrict path, char * __restrict resolved)
     if (resolved_len > 1 && resolved[resolved_len - 1] == '/')
         resolved[resolved_len - 1] = '\0';
     return (resolved);
+}
+
+int __wrap_renameat(int old_dir_fd, const char *old_path, int new_dir_fd, const char *new_path) {
+    long out = syscall(__NR_renameat, old_dir_fd, old_path, new_dir_fd, new_path);
+    if (out == -1 && errno == ENOSYS) {
+        out = syscall(__NR_renameat2, old_dir_fd, old_path, new_dir_fd, new_path, 0);
+    }
+    return out;
+}
+
+int __wrap_rename(const char *old_path, const char *new_path) {
+    return __wrap_renameat(AT_FDCWD, old_path, AT_FDCWD, new_path);
 }
