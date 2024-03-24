@@ -223,11 +223,11 @@ char * __wrap_realpath(const char * __restrict path, char * __restrict resolved)
 }
 
 int __wrap_renameat(int old_dir_fd, const char *old_path, int new_dir_fd, const char *new_path) {
-    long out = syscall(__NR_renameat, old_dir_fd, old_path, new_dir_fd, new_path);
-    if (out == -1 && errno == ENOSYS) {
-        out = syscall(__NR_renameat2, old_dir_fd, old_path, new_dir_fd, new_path, 0);
-    }
-    return out;
+#ifdef __NR_renameat
+    return syscall(__NR_renameat, old_dir_fd, old_path, new_dir_fd, new_path);
+#else
+    return syscall(__NR_renameat2, old_dir_fd, old_path, new_dir_fd, new_path, 0);
+#endif
 }
 
 int __wrap_rename(const char *old_path, const char *new_path) {
